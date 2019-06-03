@@ -7,15 +7,27 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BusinessDaysTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function smoke_test()
+    public function testSmoke()
     {
-        $response = $this->get('api/v1/businessDates/getBusinessDateWithDelay?initialDate=2018-12-12T10:10:10Z&delay=3');
+        $response = $this->json('GET', 'api/v1/businessDates/getBusinessDateWithDelay?initialDate=2018-12-12T10:10:10Z&delay=3');
         $response->assertStatus(200);
 
-        $response = $this->post('api/v1/businessDates/getBusinessDateWithDelay', ['initialDate' => '2018-12-12T10:10:10Z', 'delay' => 3], []);
+        $response = $this->json('POST', 'api/v1/businessDates/getBusinessDateWithDelay', ['initialDate' => '2018-12-12T10:10:10Z', 'delay' => 3], []);
         $response->assertStatus(200);
+    }
+
+    public function testGetBusinessDateWithDelayShouldBeValid()
+    {
+        $response = $this->json('GET', 'api/v1/businessDates/getBusinessDateWithDelay');
+        $response->assertStatus(422);
+        $response = $this->json('GET', 'api/v1/businessDates/getBusinessDateWithDelay?initialDate=test&delay=1');
+        $response->assertStatus(422);
+        $response = $this->json('GET', 'api/v1/businessDates/getBusinessDateWithDelay?initialDate=2018-12-12T10:10:10Z&delay=test');
+        $response->assertStatus(422);
+
+        $response = $this->json('POST', 'api/v1/businessDates/getBusinessDateWithDelay', ['initialDate' => 'test', 'delay' => 3], []);
+        $response->assertStatus(422);
+        $response = $this->json('POST', 'api/v1/businessDates/getBusinessDateWithDelay', ['initialDate' => '2018-12-12T10:10:10Z', 'delay' => 'test'], []);
+        $response->assertStatus(422);
     }
 }
