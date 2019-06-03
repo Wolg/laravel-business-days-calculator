@@ -2,16 +2,15 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use http\Env\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\GetBusinessDateWithDelayRequest;
 
 class BusinessDatesController extends Controller
 {
     /**
-     * @param Request $request
+     * @param GetBusinessDateWithDelayRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getBusinessDateWithDelay(Request $request)
+    public function getBusinessDateWithDelay(GetBusinessDateWithDelayRequest $request)
     {
         return response()->json([]);
     }
