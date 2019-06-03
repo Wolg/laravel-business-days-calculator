@@ -227,5 +227,19 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
-
+    // only static holidays for USA 2019 so far
+    'holidays' => [
+        'usa' => [
+            'January 1',
+            'January 21',
+            'February 18',
+            'May 27',
+            'July 4',
+            'September 2',
+            'October 14',
+            'November 11',
+            'November 28',
+            'December 25'
+        ]
+    ]
 ];
