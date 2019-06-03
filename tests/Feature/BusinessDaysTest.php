@@ -31,29 +31,36 @@ class BusinessDaysTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function testGetBusinessDateWithDelaySuccess()
+    public function testGetBusinessDateWithDelaySuccessGET()
     {
-        $expectedResult = [
+        $response = $this->json('GET', 'api/v1/businessDates/getBusinessDateWithDelay?initialDate=2018-12-12T10:10:10Z&delay=3');
+        $response
+            ->assertStatus(200)
+            ->assertJson($this->getBusinessDateWithDelaySuccessExpectedResult());
+    }
+
+    public function testGetBusinessDateWithDelaySuccessPOST()
+    {
+        $response = $this->json('POST', 'api/v1/businessDates/getBusinessDateWithDelay', ['initialDate' => '2018-12-12T10:10:10Z', 'delay' => 3], []);
+        $response
+            ->assertStatus(200)
+            ->assertJson($this->getBusinessDateWithDelaySuccessExpectedResult());
+    }
+
+    private function getBusinessDateWithDelaySuccessExpectedResult()
+    {
+        return [
             'ok' => true,
             'initialQuery' => [
                 'initialDate' => '2018-12-12T10:10:10Z',
-                'delay' => 3
+                'delay' => '3'
             ],
             'results' => [
                 'businessDate' => '2018-12-15T10:10:10Z',
                 'totalDays' => 4,
-                'holidayDays' => 1,
-                'weekendDays' => 0
+                'holidayDays' => 0,
+                'weekendDays' => 1
             ]
         ];
-        $response = $this->json('GET', 'api/v1/businessDates/getBusinessDateWithDelay?initialDate=2018-12-12T10:10:10Z&delay=3');
-        $response
-            ->assertStatus(200)
-            ->assertJson($expectedResult);
-
-        $response = $this->json('POST', 'api/v1/businessDates/getBusinessDateWithDelay', ['initialDate' => '2018-12-12T10:10:10Z', 'delay' => 3], []);
-        $response
-            ->assertStatus(200)
-            ->assertJson($expectedResult);
     }
 }
