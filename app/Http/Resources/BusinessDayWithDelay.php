@@ -18,7 +18,10 @@ class BusinessDayWithDelay extends JsonResource
             'ok' => true,
             'initialQuery' => $request->all(),
             'results' => [
-
+                'businessDate' => $this->resource->getBusinessDate(),
+                'totalDays' => $this->resource->getTotalDays(),
+                'holidayDays' => $this->resource->getHolidayDays(),
+                'weekendDays' => $this->resource->getWeekendDays(),
             ]
         ];
     }

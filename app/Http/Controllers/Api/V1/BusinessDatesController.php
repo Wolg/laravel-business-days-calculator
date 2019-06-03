@@ -3,15 +3,36 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetBusinessDateWithDelayRequest;
+use App\Http\Resources\BusinessDayWithDelay;
+use App\Services\BusinessDaysCalculatorService;
+use Carbon\Carbon;
 
 class BusinessDatesController extends Controller
 {
     /**
+     * @var BusinessDaysCalculatorService
+     */
+    protected $service;
+
+    /**
+     * BusinessDatesController constructor.
+     * @param BusinessDaysCalculatorService $service
+     */
+    public function __construct(BusinessDaysCalculatorService $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
      * @param GetBusinessDateWithDelayRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return BusinessDayWithDelay
      */
     public function getBusinessDateWithDelay(GetBusinessDateWithDelayRequest $request)
     {
-        return response()->json([]);
+        $result = $this->service->calculate(
+            Carbon::parse($request->get('initialDate')),
+            $request->get('delay')
+        );
+        return new BusinessDayWithDelay($result);
     }
 }
